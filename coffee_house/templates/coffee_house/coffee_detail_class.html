@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    {{ coffee.name }}
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="container">
+        <a href="javascript:history.back()" class="btn btn-secondary my-lg-2" type="button"><<</a>
+        <div class="card">
+            <div class="card-header card-header-secondary">
+                <div class="d-flex justify-content-between">
+
+                    <h4 class="card-title">{{ coffee.name }}</h4>
+                    <div class="d-flex justify-content-between">
+                        {% if coffee.pk not in keys_favorite %}
+                            <form method="post" action="{% url 'add_favorite_prod' coffee.pk %}">
+                                {% csrf_token %}
+                                <input type="image" src="{% static 'image/unfavorite.png' %}" alt="Submit"
+                                       width="32" height="32">
+                            </form>
+                        {% else %}
+                            <form method="post" action="{% url 'remove_favorite_prod' coffee.pk %}">
+                                {% csrf_token %}
+                                <input type="image" src="{% static 'image/favorite.png' %}" alt="Submit"
+                                       width="32" height="32">
+                            </form>
+                        {% endif %}
+
+                        <div class="mx-2"></div>
+
+                        {% if coffee.pk not in keys_basket %}
+                            <form method="post" action="{% url 'add_basket_prod' coffee.pk %}">
+                                {% csrf_token %}
+                                <input type="submit" class="btn btn-outline-dark" value="Купить">
+                            </form>
+                        {% else %}
+                            <a href="{% url 'list_basket_prod' %}" class="btn btn-outline-success">В корзине</a>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <div class="form-group card-body">
+                {{ coffee.description }}
+            </div>
+
+            <div class="form-group card-body text-center">
+                {% if coffee.photo %}
+                    <img src="{{ coffee.photo.url }}" class="img-thumbnail" width="800" height="500" alt="...">
+                {% else %}
+                    <img src="{% static 'image/defaul_img.jpg' %}" class="img-thumbnail" width="800" height="500"
+                         alt="...">
+                {% endif %}
+            </div>
+
+            <div class="form-group card-body text-center">
+                <h3>Объем: {{ coffee.volume }} мл | Стоимость: {{ coffee.price }} ₽</h3>
+            </div>
+
+            {% if perms.coffee.change_coffee or perms.coffee.delete_coffee %}
+                <div class="form-group card-body text-center">
+                    <div class="d-flex justify-content-center">
+                        {% if perms.coffee.change_coffee %}
+                            <a href="{% url 'coffee_update' coffee.pk %}" class="btn btn-outline-success mx-2"
+                               type="button">Изменить</a>
+                        {% endif %}
+
+                        {% if perms.coffee.delete_coffee %}
+                            <form method="post" action="{% url 'coffee_delete' coffee.pk %}">
+                                {% csrf_token %}
+                                <input class="btn btn-outline-danger mx-2" type="submit" value="Удалить">
+                            </form>
+                        {% endif %}
+
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if cof_ing|length > 0 %}
+                <div class="form-group card-body text-center">
+                    <h3>ИНГРЕДИЕНТЫ</h3>
+                    <ul class="list-group list-group-flush">
+
+                        {% for foo in cof_ing %}
+                            <li class="list-group-item">
+                                <p>
+                                    <button class="btn btn-outline-info col-lg-10" type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#InfoIngredient-{{ forloop.counter0 }}"
+                                            aria-expanded="false"
+                                            aria-controls="collapseExample">
+                                        {{ foo.ingredient.name }} {{ foo.count_ingredient }} {{ foo.measured }}
+                                    </button>
+                                </p>
+                                <div class="collapse" id="InfoIngredient-{{ forloop.counter0 }}">
+                                    <div class="card card-body">
+                                        <p>{{ foo.ingredient.description }}</p>
+                                        <h4>Стоимость: {{ foo.ingredient.price }} ₽</h4>
+                                        {% if foo.ingredient.photo %}
+                                            <div class="text-center">
+                                                <img src="{{ foo.ingredient.photo.url }}" class="img-thumbnail"
+                                                     width="400"
+                                                     height="310"
+                                                     alt="...">
+                                            </div>
+                                        {% endif %}
+                                        <a href="{{ foo.ingredient.get_absolute_url }}">Страница ингредиента</a>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {% if recipe|length > 0 %}
+                <div class="form-group card-body text-center">
+
+                    <h3>ПОШАГОВЫЙ РЕЦЕПТ ПРИГОТОВЛЕНИЯ</h3>
+                    {% for foo in recipe %}
+                        <h5 class="my-3">Шаг {{ forloop.counter }}</h5>
+                        <p>{{ foo.description }}</p>
+                        {% if foo.photo %}
+                            <img src="{{ foo.photo.url }}" class="img-thumbnail" width="400"
+                                 height="310"
+                                 alt="...">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+
+        </div>
+    </div>
+
+{% endblock %}

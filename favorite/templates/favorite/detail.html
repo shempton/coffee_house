@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Избранное
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% if request.session.favorite|length > 0 %}
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Кофе</th>
+                    <th scope="col">Картинка</th>
+                    <th scope="col">Цена</th>
+                    <th scope="col">Удаление</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for item in favorite %}
+
+                    {% with product_obj=item.coffee %}
+
+                        <tr>
+                            <td>
+                                <a href="{{ product_obj.get_absolute_url }}">
+                                    {{ product_obj.name }}
+                                </a>
+                            </td>
+                            <td>
+
+                                <a href="{{ product_obj.get_absolute_url }}">
+                                    {% if product_obj.photo %}
+                                        <img src="{{ product_obj.photo.url }}" class="img-thumbnail" width="250"
+                                             height="180"
+                                             alt="...">
+                                    {% else %}
+                                        <img src="{% static 'image/defaul_img.jpg' %}" class="img-thumbnail" width="250"
+                                             height="180" alt="...">
+                                    {% endif %}
+                                </a>
+
+                            </td>
+                            <td scope="row"> {{ item.price_prod }} ₽</td>
+                            <td scope="row"><a href="{% url 'remove_favorite_prod' product_obj.pk %}">Удалить</a></td>
+                        </tr>
+
+                    {% endwith %}
+
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+
+            <div>
+                <a href="{% url 'clear_favorite_prod' %}" class="btn btn-danger">Очистить избранное</a>
+            </div>
+
+        {% else %}
+            <h3>В списке пока нет ни одного избранного товара</h3>
+            <p>Перейти на <a href="{% url 'coffee_list' %}">главную страницу</a></p>
+        {% endif %}
+
+    </div>
+{% endblock %}

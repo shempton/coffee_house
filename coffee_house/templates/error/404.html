@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+
+    <h1>Ошибка 404</h1>
+    <p>Данной страницы не существует</p>
+    <a href="{% url 'coffee_list' %}" class="btn btn-success">Вернуться на главную</a>
+
+{% endblock %}

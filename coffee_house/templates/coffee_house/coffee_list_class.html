@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+            {% for coffee in page_obj.object_list %}
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <a href="{{ coffee.get_absolute_url }}">
+                            {% if coffee.photo %}
+                                <img src="{{ coffee.photo.url }}" class="card-img-top" width="400" height="230"
+                                     alt="...">
+                            {% else %}
+                                <img src="{% static 'image/defaul_img.jpg' %}" class="card-img-top" width="400"
+                                     height="230"
+                                     alt="...">
+                            {% endif %}
+                        </a>
+
+                        <div class="card-body">
+                            <p class="card-text"><a href="{{ coffee.get_absolute_url }}"
+                                                    class="link-dark text-decoration-none">{{ coffee.name }}</a></p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <div class="d-flex justify-content-between">
+                                        {% if coffee.pk not in keys_favorite %}
+                                            <form method="post" action="{% url 'add_favorite_prod' coffee.pk %}">
+                                                {% csrf_token %}
+                                                <input type="image" src="{% static 'image/unfavorite.png' %}"
+                                                       alt="Submit"
+                                                       width="24" height="24">
+                                            </form>
+                                        {% else %}
+                                            <form method="post" action="{% url 'remove_favorite_prod' coffee.pk %}">
+                                                {% csrf_token %}
+                                                <input type="image" src="{% static 'image/favorite.png' %}" alt="Submit"
+                                                       width="24" height="24">
+                                            </form>
+                                        {% endif %}
+
+                                        <div class="mx-1"></div>
+
+                                        {% if coffee.pk not in keys_basket %}
+                                            <form method="post" action="{% url 'add_basket_prod' coffee.pk %}">
+                                                {% csrf_token %}
+                                                <input type="image" src="{% static 'image/unbasket.png' %}"
+                                                       alt="Купить" width="24" height="24">
+                                            </form>
+                                        {% else %}
+                                            <form method="get" action="{% url 'list_basket_prod' %}">
+                                                <input type="image" src="{% static 'image/inbasket.png' %}"
+                                                       alt="В корзине" width="24" height="24">
+                                            </form>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-monospace fw-bold">{{ coffee.price }} ₽</span>
+                                    <small class="text-muted">/ {{ coffee.volume }} мл</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="my-3"></div>
+
+    {% if page_obj.has_next or page_obj.has_previous %}
+
+        <div class="container text-center">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for page in page_obj.paginator.page_range %}
+                        {% if page_obj.number == page %}
+                            <li class="page-item active" aria-current="page"><a class="page-link"
+                                                                                href="?page={{ page }}">{{ page }}</a>
+                            </li>
+                        {% elif page > page_obj.number|add:-2 and page < page_obj.number|add:2 %}
+
+                            {#                    {% else %}#}
+                            <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                        {% endif %}
+
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
+
+{% endblock %}

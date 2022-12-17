@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    {{ ingredients.name }}
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="container">
+        <a href="javascript:history.back()" class="btn btn-secondary my-lg-2" type="button"><<</a>
+        <div class="card">
+            <div class="card-header card-header-secondary">
+                <div class="d-flex justify-content-between">
+                    <h4 class="card-title">{{ ingredients.name }}</h4>
+                </div>
+            </div>
+
+            <div class="form-group card-body">
+                {{ ingredients.description }}
+            </div>
+
+            <div class="form-group card-body text-center">
+                {% if ingredients.photo %}
+                    <img src="{{ ingredients.photo.url }}" class="img-thumbnail" width="800" height="500" alt="...">
+                {% else %}
+                    <img src="{% static 'image/nophoto.png' %}" class="img-thumbnail" width="800" height="500"
+                         alt="...">
+                {% endif %}
+            </div>
+
+
+            <div class="form-group card-body text-center">
+                <h3>Стоимость: {{ ingredients.price }} ₽</h3>
+            </div>
+
+            {% if perms.ingredients.change_ingredients or perms.ingredients.delete_ingredients %}
+                <div class="form-group card-body text-center">
+                    <div class="d-flex justify-content-center">
+
+                        {% if perms.ingredients.change_ingredients %}
+                            <a href="{% url 'ingredient_update' ingredients.pk %}" class="btn btn-outline-success mx-2"
+                               type="button">Изменить</a>
+                        {% endif %}
+
+                        {% if perms.ingredients.delete_ingredients %}
+                            <form method="post" action="{% url 'ingredient_delete' ingredients.pk %}">
+                                {% csrf_token %}
+                                <input class="btn btn-outline-danger mx-2" type="submit" value="Удалить">
+                            </form>
+                        {% endif %}
+
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}

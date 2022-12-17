@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Корзина
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% if request.session.basket|length > 0 %}
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Кофе</th>
+                    <th scope="col">Картинка</th>
+                    <th scope="col">Цена</th>
+                    <th scope="col">Количество</th>
+                    <th scope="col">Сумма</th>
+                    <th scope="col">Удаление</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for item in basket %}
+
+                    {% with product_obj=item.coffee %}
+
+                        <tr>
+                            <td>
+                                <a href="{{ product_obj.get_absolute_url }}">
+                                    {{ product_obj.name }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ product_obj.get_absolute_url }}">
+                                    {% if product_obj.photo %}
+                                        <img src="{{ product_obj.photo.url }}" class="img-thumbnail" width="250"
+                                             height="180"
+                                             alt="...">
+                                    {% else %}
+                                        <img src="{% static 'image/defaul_img.jpg' %}" class="img-thumbnail" width="250"
+                                             height="180" alt="...">
+                                    {% endif %}
+                                </a>
+
+                            </td>
+                            <td scope="row"> {{ item.price_prod }} ₽</td>
+                            <td>
+                                <form method="post" action="{% url 'update_basket_prod' product_obj.pk %}"
+                                      id="{{ product_obj.pk }}">
+                                    {% csrf_token %}
+                                    <input aria-label="Кол-во" type="number" id="{{ product_obj.pk }}"
+                                           name="quantity" min="1"
+                                           max="32" value="{{ item.count_prod }}">
+                                    <input type="hidden" class="btn btn-success" value="Обновить">
+                                </form>
+                            </td>
+                            <td scope="row"> {{ item.total_price }} ₽</td>
+                            <td scope="row"><a href="{% url 'remove_basket_prod' product_obj.pk %}">Удалить</a></td>
+                        </tr>
+
+
+                    {% endwith %}
+
+                {% endfor %}
+                <tr>
+                    <td>Всего:</td>
+                    <td colspan="4"></td>
+                    <td>{{ basket.get_total_price }} ₽</td>
+                </tr>
+                </tbody>
+            </table>
+
+
+            <div>
+                <a href="{% url 'clear_basket_prod' %}" class="btn btn-danger">Очистить корзину</a>
+                <a href="#" class="btn btn-success">Оформить заказ</a>
+            </div>
+
+        {% else %}
+            <h3>Корзина пуста</h3>
+            <p>Посмотрите предложения на <a href="{% url 'coffee_list' %}">главной странице</a></p>
+        {% endif %}
+
+    </div>
+
+{% endblock %}

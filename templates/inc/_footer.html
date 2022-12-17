@@ -1,0 +1,27 @@
+<div class="container">
+    <footer class="py-3 my-4">
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item"><a href="{% url 'coffee_list' %}" class="nav-link px-2 text-muted">Главная</a></li>
+            <li class="nav-item"><a href="{% url 'contact_email' %}" class="nav-link px-2 text-muted">Жалобы и
+                предложения</a></li>
+
+            {% if perms.coffee.add_coffee %}
+                <li class="nav-item"><a href="{% url 'coffee_create' %}" class="nav-link px-2 text-muted">Добавить
+                    кофе</a>
+                </li>
+            {% endif %}
+            {% if perms.ingredients.add_ingredients %}
+                <li class="nav-item"><a href="{% url 'ingredient_create' %}" class="nav-link px-2 text-muted">Добавить
+                    Ингредиент</a></li>
+            {% endif %}
+
+            {% if perms.coffee %}
+                <li class="nav-item"><a href="{% url 'api_coffee_list' %}" class="nav-link px-2 text-muted">API
+                    Coffee</a>
+                </li>
+            {% endif %}
+
+        </ul>
+        <p class="text-center text-muted">© 2022 Coffee House, Inc</p>
+    </footer>
+</div>

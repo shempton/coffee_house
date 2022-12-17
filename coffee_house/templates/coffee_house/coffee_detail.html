@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    {{ coffee.name }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container text-lg-start">
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="text-center">
+                    {% if coffee.photo %}
+                        <img src="{{ coffee.photo.url }}" class="img-thumbnail" width="600" height="360" alt="...">
+                    {% else %}
+                        <img src="{% static 'image/defaul_img.jpg' %}" class="img-thumbnail" width="600" height="360"
+                             alt="...">
+                    {% endif %}
+                </div>
+
+            </div>
+            <div class="col">
+                <ul class="list-group">
+                    <li class="list-group-item"><h2>{{ coffee.name }}</h2></li>
+                    <li class="list-group-item">Рецепт: {{ coffee.recipe }}</li>
+                    <li class="list-group-item">Объем: {{ coffee.volume }} л</li>
+                    <li class="list-group-item">Цена: {{ coffee.price }} ₽</li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-grid d-md-flex justify-content-md-end">
+
+            <a href="{% url 'coffee_list' %}" class="btn btn-primary" type="button">Назад</a>
+        </div>
+
+    </div>
+
+
+{% endblock %}

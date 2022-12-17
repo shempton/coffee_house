@@ -1,0 +1,37 @@
+{% load static %}
+
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <a href="{% url 'coffee_list' %}"
+           class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+            <img src="{% static 'image/coffee_icon.jpg' %}" alt="" class="bi me-2" width="65" height="55" role="img"
+                 aria-label="Bootstrap">
+        </a>
+
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="{% url 'coffee_list' %}" class="nav-link px-2 link-dark">Главная</a></li>
+            <li><a href="{% url 'ingredient_list' %}" class="nav-link px-2 link-dark">Ингредиенты</a></li>
+            <li><a href="{% url 'list_favorite_prod' %}" class="nav-link px-2 link-dark">Избранное
+                {% if request.session.favorite|length > 0 %}
+                    <span class="badge bg-primary rounded-pill">{{ request.session.favorite|length }}</span>
+                {% endif %}
+            </a></li>
+            <li><a href="{% url 'list_basket_prod' %}" class="nav-link px-2 link-dark">Корзина
+                {% if request.session.basket|length > 0 %}
+                    <span class="badge bg-danger rounded-pill">{{ request.session.basket|length }}</span>
+                {% endif %}
+            </a></li>
+        </ul>
+
+        <div class="col-md-3 text-end">
+            {% if request.user.is_anonymous %}
+                <a href="{% url 'login' %}" type="button" class="btn btn-outline-primary me-2">Войти</a>
+                <a href="{% url 'regis' %}" type="button" class="btn btn-primary">Зарегистрироваться</a>
+            {% else %}
+                <a href="{% url 'logout' %}" type="button" class="btn btn-primary">Выйти</a>
+            {% endif %}
+
+        </div>
+
+    </header>
+</div>

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+
+    <h1>Ошибка 500</h1>
+    <p>Ошибка сервера</p>
+    <a href="{% url 'coffee_list' %}" class="btn btn-success">Вернуться на главную</a>
+
+{% endblock %}

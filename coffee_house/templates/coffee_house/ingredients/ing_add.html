@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Добавление нового ингредиента
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="input-group mb-3">
+                    <span class="input-group-text">{{ field.label }}</span>
+                    {{ field }}
+                </div>
+
+                {% if field.errors %}
+                    {{ field.errors }}
+                {% endif %}
+            {% endfor %}
+
+
+            <button type="submit" class="btn btn-success btn-lg">Добавить</button>
+            <br>
+        </form>
+    </div>
+
+{% endblock %}

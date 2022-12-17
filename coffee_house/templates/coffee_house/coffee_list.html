@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+            {% for coffee in page_obj.object_list %}
+                <div class="col">
+                    <div class="card shadow-sm">
+
+                        {% if coffee.photo %}
+                            <img src="{{ coffee.photo.url }}" class="card-img-top" width="400" height="230" alt="...">
+                        {% else %}
+                            <img src="{% static 'image/defaul_img.jpg' %}" class="card-img-top" width="400" height="200"
+                                 alt="...">
+                        {% endif %}
+
+                        <div class="card-body">
+                            <p class="card-text">{{ coffee.name }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a href="{% url 'coffee_detail' coffee.pk %}" type="button"
+                                       class="btn btn-sm btn-outline-secondary">Подробнее</a>
+                                </div>
+                                <small class="text-muted">{{ coffee.volume }} л</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <div class="container text-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% for page in page_obj.paginator.page_range %}
+                    {% if page_obj.number == page %}
+                        <li class="page-item active" aria-current="page"><a class="page-link"
+                                                                            href="?page={{ page }}">{{ page }}</a></li>
+                    {% elif page > page_obj.number|add:-2 and page < page_obj.number|add:2 %}
+
+{#                    {% else %}#}
+                        <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                    {% endif %}
+
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+    </div>
+
+{% endblock %}

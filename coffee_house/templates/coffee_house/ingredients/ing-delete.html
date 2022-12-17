@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Удаление {{ object.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+
+            Действительно ли вы хотите удалить ингредиент {{ object.name }}?
+
+            <input type="submit" class="btn btn-success btn-lg" value="Удалить">
+            <br>
+        </form>
+    </div>
+
+{% endblock %}
