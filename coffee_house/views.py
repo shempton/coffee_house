@@ -293,29 +293,6 @@ def user_logout(request):
     return redirect('login')
 
 
-def contact_email(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            mail = send_mail(
-                form.cleaned_data['subject'],
-                form.cleaned_data['content'],
-                settings.EMAIL_HOST_USER,
-                ['email-example'],
-                fail_silently=False
-            )
-            if mail:
-                messages.success(request, 'Письмо успешно отправлено.')
-                return redirect('coffee_list')
-            else:
-                messages.error(request, 'Письмо не удалось отправить, попробуйте позже')
-        else:
-            messages.warning(request, 'Письмо неверно заполнено, перепроверьте внесенные данные')
-    else:
-        form = ContactForm()
-    return render(request, 'email.html', {'form': form})
-
-
 @api_view(['GET', 'POST'])
 @permission_required('coffee.add_coffee')
 def coffee_api_list(request):

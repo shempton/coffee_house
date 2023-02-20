@@ -25,8 +25,6 @@ urlpatterns = [
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
 
-    path('contact/', views.contact_email, name='contact_email'),
-
     path('api/coffee/', views.coffee_api_list, name='api_coffee_list'),
     path('api/coffee/<int:pk>', views.coffee_api_detail, name='api_coffee_detail'),
 

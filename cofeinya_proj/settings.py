@@ -130,13 +130,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = 'my-email'
-EMAIL_HOST_PASSWORD = 'my-password'
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
-
 # SESSIONS
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 FAVORITE_SESSION_ID = 'favorite'
