@@ -31,7 +31,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 class CoffeeList(ListView):
     model = coffee
-    template_name = 'coffee_house/coffee_list_class.html'
+    template_name = 'coffee_house/coffee/coffee_list_class.html'
     extra_context = {'title': 'Главная'}
 
     paginate_by = 6
@@ -72,7 +72,7 @@ def get_basket_keys_from_session(request):
 
 class CoffeeDetail(DetailView):
     model = coffee
-    template_name = 'coffee_house/coffee_detail_class.html'
+    template_name = 'coffee_house/coffee/coffee_detail_class.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -86,7 +86,7 @@ class CoffeeDetail(DetailView):
 class CoffeeInline():
     form_class = CoffeeForm
     model = coffee
-    template_name = 'coffee_house/coffee_add.html'
+    template_name = 'coffee_house/coffee/coffee_add.html'
 
     def form_valid(self, form):
 
@@ -203,7 +203,7 @@ def delete_recipe(request, pk):
 
 class CoffeeDelete(DeleteView):
     model = coffee
-    template_name = 'coffee_house/coffee_delete.html'
+    template_name = 'coffee_house/coffee/coffee_delete.html'
     success_url = reverse_lazy('coffee_list')
 
     @method_decorator(permission_required('coffee.delete_coffee'))
@@ -250,7 +250,7 @@ class IngredientUpdate(UpdateView):
 
 class IngredientDelete(DeleteView):
     model = ingredients
-    template_name = 'coffee_house/ingredients/ing-delete.html'
+    template_name = 'coffee_house/ingredients/ing_delete.html'
     success_url = reverse_lazy('ingredient_list')
 
     @method_decorator(permission_required('ingredients.delete_ingredients'))
@@ -328,24 +328,24 @@ def coffee_api_detail(request, pk):
 
 
 def error_404(request, exception):
-    response = render(request, 'error/404.html', {'title': 'Страница не найдена'})
+    response = render(request, 'errors/404.html', {'title': 'Страница не найдена'})
     response.status_code = 404
     return response
 
 
 def error_400(request, exception):
-    response = render(request, 'error/400.html', {'title': 'Неверный запрос'})
+    response = render(request, 'errors/400.html', {'title': 'Неверный запрос'})
     response.status_code = 400
     return response
 
 
 def error_403(request, exception):
-    response = render(request, 'error/403.html', {'title': 'Ошибка доступа'})
+    response = render(request, 'errors/403.html', {'title': 'Ошибка доступа'})
     response.status_code = 403
     return response
 
 
 def error_500(request, *args, **kwargs):
-    response = render(request, 'error/500.html', {'title': 'Внутренняя ошибка сервера'})
+    response = render(request, 'errors/500.html', {'title': 'Внутренняя ошибка сервера'})
     response.status_code = 500
     return response
