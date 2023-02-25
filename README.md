@@ -14,6 +14,7 @@
 + Прописаны права доступа и разрешения
 + CRUD REST API 
 + Тесты
++ Запуск в контейнере Docker
 
 ## Запуск
 ```
@@ -22,13 +23,25 @@ python -m venv env
 source ./env/bin/activate
 cd coffee_house/
 pip install -r requirements.txt
-./manage.py makemigrations --merge
 ./manage.py migrate
 ./manage.py runserver
 ```
 
+*Используя Docker*
+```
+git clone git@github.com:shempton/coffee_house.git
+cd coffee_house/
+docker build . -t coffee-django:v1
+docker run -d -p 8000:8000 coffee-django:v1
+```
+
+*Создание супер пользователя*
+```
+docker exec -it <container_id> python manage.py createsuperuser
+```
+
 ## Идеи
-+ Запуск, используя Docker
++ ~~Запуск, используя Docker~~
 + Подключить платежную систему Stripe
 + JWT authentication
 + Деплой на сервер
