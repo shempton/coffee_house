@@ -20,8 +20,7 @@ from django.conf.urls.static import static
 from django.shortcuts import redirect
 
 urlpatterns = [
-    path('', lambda request: redirect('coffee_list', permanent=True)),
-    path('coffee/', include('coffee_house.urls')),
+    path('', include('coffee_house.urls')),
     path('favorite/', include('favorite.urls')),
     path('basket/', include('basket.urls')),
     path('admin/', admin.site.urls),
